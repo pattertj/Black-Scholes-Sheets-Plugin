@@ -13,8 +13,8 @@
 function CALLPRICE(price, strike, volatility, interest, dividend, days) {
   var xert = Math.exp(-interest *(days/365)) * strike;
   var xeqt = Math.exp(-dividend *(days/365)) * price;
-  var nD1 = NORMALDISTRIBUTION_(D1_(price, strike, volatility, interest, dividend, days));
-  var nNegD1 = NORMALDISTRIBUTION_(-D1_(price, strike, volatility, interest, dividend, days));
+  var nD1 = NORMDIST_(D1_(price, strike, volatility, interest, dividend, days));
+  var nNegD1 = NORMDIST_(-D1_(price, strike, volatility, interest, dividend, days));
   
   return xeqt * nD1 - xert * nNegD1;
 }
@@ -32,7 +32,17 @@ function CALLPRICE(price, strike, volatility, interest, dividend, days) {
 * @return the Black-Scholes calculation for an option's Delta.
 * @customfunction
 */
-function DELTA(price, strike, volatility, interest, dividend, days, optiontype) {
+function OPTIONDELTA(price, strike, volatility, interest, dividend, days, optiontype) {
+  var eqt = Math.exp(-dividend *(days/365));
+  
+  var nd1 = NORMDIST_(D1_(price, strike, volatility, interest, dividend, days));
+  
+  if (optiontype == "Put")
+  {
+    nd1 = nd1 - 1;
+  }
+  
+  return eqt * nd1;
 }
 
 /**
@@ -48,7 +58,7 @@ function DELTA(price, strike, volatility, interest, dividend, days, optiontype) 
 * @return the Black-Scholes calculation for an option's Gamma.
 * @customfunction
 */
-function GAMMA(price, strike, volatility, interest, dividend, days, optiontype) {
+function OPTIONGAMMA(price, strike, volatility, interest, dividend, days, optiontype) {
 }
 
 
@@ -65,7 +75,7 @@ function GAMMA(price, strike, volatility, interest, dividend, days, optiontype) 
 * @return the Black-Scholes calculation for an option's Theta.
 * @customfunction
 */
-function THETA(price, strike, volatility, interest, dividend, days, optiontype) {
+function OPTIONTHETA(price, strike, volatility, interest, dividend, days, optiontype) {
 }
 
 
@@ -82,7 +92,7 @@ function THETA(price, strike, volatility, interest, dividend, days, optiontype) 
 * @return the Black-Scholes calculation for an option's Vega.
 * @customfunction
 */
-function VEGA(price, strike, volatility, interest, dividend, days, optiontype) {
+function OPTIONVEGA(price, strike, volatility, interest, dividend, days, optiontype) {
 }
 
 
@@ -99,7 +109,7 @@ function VEGA(price, strike, volatility, interest, dividend, days, optiontype) {
 * @return the Black-Scholes calculation for an option's Rho.
 * @customfunction
 */
-function RHO(price, strike, volatility, interest, dividend, days, optiontype) {
+function OPTIONRHO(price, strike, volatility, interest, dividend, days, optiontype) {
 }
 
 /**
@@ -117,8 +127,8 @@ function RHO(price, strike, volatility, interest, dividend, days, optiontype) {
 function PUTPRICE(price, strike, volatility, interest, dividend, days) {
   var xert = Math.exp(-interest *(days/365)) * strike;
   var xeqt = Math.exp(-dividend *(days/365)) * price;
-  var nD2 = NORMALDISTRIBUTION_(D2_(price, strike, volatility, interest, dividend, days));
-  var nNegD2 = NORMALDISTRIBUTION_(-D2_(price, strike, volatility, interest, dividend, days));
+  var nD2 = NORMDIST_(D2_(price, strike, volatility, interest, dividend, days));
+  var nNegD2 = NORMDIST_(-D2_(price, strike, volatility, interest, dividend, days));
   
   return xeqt * nD2 - xert * nNegD2;
 }
@@ -169,7 +179,7 @@ function D2_(price, strike, volatility, interest, dividend, days) {
 * @return the value of the normal distribution of d.
 * @customfunction
 */
-function NORMALDISTRIBUTION_(d) {
+function NORMDIST_(d) {
   var z = (d)/Math.sqrt(2);
   var t = 1/(1+0.3275911*Math.abs(z));
   var a1 =  0.254829592;
