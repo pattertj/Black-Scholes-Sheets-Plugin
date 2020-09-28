@@ -1,13 +1,13 @@
 /**
 * Calculates an Option's Delta using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days.
-* @param {7} input the type of option, Call or Put.
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
+* @param {string} optiontype - The the type of option, Call or Put.
 * @return the Black-Scholes calculation for an option's Delta.
 * @customfunction
 */
@@ -26,12 +26,12 @@ function OPTIONDELTA(price, strike, volatility, interest, dividend, days, option
 /**
 * Calculates an Option's Gamma using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days.
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
 * @return the Black-Scholes calculation for an option's Gamma.
 * @customfunction
 */
@@ -48,13 +48,13 @@ function OPTIONGAMMA(price, strike, volatility, interest, dividend, days) {
 /**
 * Calculates an Option's Theta using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days.
-* @param {7} input the type of option, Call or Put.
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
+* @param {string} optiontype - The the type of option, Call or Put.
 * @return the Black-Scholes calculation for an option's Theta.
 * @customfunction
 */
@@ -77,13 +77,13 @@ function OPTIONTHETA(price, strike, volatility, interest, dividend, days, option
 /**
 * Calculates an Option's Vega using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days.
-* @param {7} input the type of option, Call or Put.
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
+* @param {string} optiontype - The the type of option, Call or Put.
 * @return the Black-Scholes calculation for an option's Vega.
 * @customfunction
 */
@@ -99,12 +99,12 @@ function OPTIONVEGA(price, strike, volatility, interest, dividend, days) {
 /**
 * Calculates an Option's Rho using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days.
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
 * @return the Black-Scholes calculation for an option's Rho.
 * @customfunction
 */
@@ -125,16 +125,16 @@ function OPTIONRHO(price, strike, volatility, interest, dividend, days, optionty
 }
 
 /**
-* Calculates Call Price using the Black-Scholes Model.
+* Calculates Option Price using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days.
-* @param {7} input the type of option, Call or Put.
-* @return the price of a Call.
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
+* @param {string} optiontype - The the type of option, Call or Put.
+* @return the price of an Option.
 * @customfunction
 */
 function OPTIONPRICE(price, strike, volatility, interest, dividend, days, optiontype) {
@@ -160,12 +160,12 @@ function OPTIONPRICE(price, strike, volatility, interest, dividend, days, option
 /**
 * Calculates D1 using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days .
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
 * @return the value of D1.
 * @customfunction
 */
@@ -181,12 +181,12 @@ function D1_(price, strike, volatility, interest, dividend, days) {
 /**
 * Calculates D2 using the Black-Scholes Model.
 *
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days .
+* @param {number} price - The spot price of the underlying asset.
+* @param {number} strike - The strike price of the option.
+* @param {number} volatility - The volatility of returns of the underlying asset.
+* @param {number} interest - The input the risk-free interest rate.
+* @param {number} dividend - The dividend rate as a percentage.
+* @param {number} days - The time to maturity in days.
 * @return the value of D2.
 * @customfunction
 */
@@ -201,7 +201,7 @@ function D2_(price, strike, volatility, interest, dividend, days) {
 /**
 * Calculates an estimation of the normal distribution of a value.
 *
-* @param {1} input the d value.
+* @param {number} d - The d value.
 * @return the value of the normal distribution of d.
 * @customfunction
 */
