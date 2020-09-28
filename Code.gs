@@ -1,25 +1,4 @@
 /**
-* Calculates Call Price using the Black-Scholes Model.
-*
-* @param {1} input the spot price of the underlying asset.
-* @param {2} input the strike price of the option.
-* @param {3} input the the volatility of returns of the underlying asset.
-* @param {4} input the risk-free interest rate.
-* @param {5} input the dividend rate as a percentage.
-* @param {6} input the time to maturity in days .
-* @return the price of a Call.
-* @customfunction
-*/
-function CALLPRICE(price, strike, volatility, interest, dividend, days) {
-  var xert = Math.exp(-interest *(days/365)) * strike;
-  var xeqt = Math.exp(-dividend *(days/365)) * price;
-  var nD1 = NORMDIST_(D1_(price, strike, volatility, interest, dividend, days));
-  var nNegD1 = NORMDIST_(-D1_(price, strike, volatility, interest, dividend, days));
-  
-  return xeqt * nD1 - xert * nNegD1;
-}
-
-/**
 * Calculates an Option's Delta using the Black-Scholes Model.
 *
 * @param {1} input the spot price of the underlying asset.
@@ -34,7 +13,6 @@ function CALLPRICE(price, strike, volatility, interest, dividend, days) {
 */
 function OPTIONDELTA(price, strike, volatility, interest, dividend, days, optiontype) {
   var eqt = Math.exp(-dividend *(days/365));
-  
   var nd1 = NORMDIST_(D1_(price, strike, volatility, interest, dividend, days));
   
   if (optiontype == "Put")
@@ -54,11 +32,16 @@ function OPTIONDELTA(price, strike, volatility, interest, dividend, days, option
 * @param {4} input the risk-free interest rate.
 * @param {5} input the dividend rate as a percentage.
 * @param {6} input the time to maturity in days.
-* @param {7} input the type of option, Call or Put.
 * @return the Black-Scholes calculation for an option's Gamma.
 * @customfunction
 */
-function OPTIONGAMMA(price, strike, volatility, interest, dividend, days, optiontype) {
+function OPTIONGAMMA(price, strike, volatility, interest, dividend, days) {
+  var d1 = D1_(price, strike, volatility, interest, dividend, days);
+  var time = days/365;
+  var eqt = Math.exp(-dividend * time);
+  var asqrtT = volatility * Math.sqrt(time);
+  
+  return Math.exp(-1 * Math.pow(d1, 2)/2)/Math.sqrt(2*Math.PI)*eqt/(price*asqrtT);  
 }
 
 
@@ -76,6 +59,18 @@ function OPTIONGAMMA(price, strike, volatility, interest, dividend, days, option
 * @customfunction
 */
 function OPTIONTHETA(price, strike, volatility, interest, dividend, days, optiontype) {
+  var d1 = D1_(price, strike, volatility, interest, dividend, days);
+  var time = days/365;
+  var eqt = Math.exp(-dividend * time);
+  var xert = Math.exp(-interest * time) * strike;
+  var nd1 = NORMDIST_(D1_(price, strike, volatility, interest, dividend, days));
+  
+  if (optiontype == "Put")
+  {
+    return (-(price*Math.exp(-1*Math.pow(d1,2)/2)/Math.sqrt(2*Math.PI)*volatility*eqt/(2*Math.sqrt(time)))+(interest*xert*nd1)-(dividend*price*nd1*eqt))/365;  
+  }
+  
+  return (-(price*Math.exp(-1*Math.pow(d1,2)/2)/Math.sqrt(2*Math.PI)*volatility*eqt/(2*Math.sqrt(time)))-(interest*xert*nd1)+(dividend*price*nd1*eqt))/365;
 }
 
 
@@ -92,7 +87,12 @@ function OPTIONTHETA(price, strike, volatility, interest, dividend, days, option
 * @return the Black-Scholes calculation for an option's Vega.
 * @customfunction
 */
-function OPTIONVEGA(price, strike, volatility, interest, dividend, days, optiontype) {
+function OPTIONVEGA(price, strike, volatility, interest, dividend, days) {
+  var d1 = D1_(price, strike, volatility, interest, dividend, days);
+  var time = days/365;
+  var eqt = Math.exp(-dividend * time);
+  
+  return Math.exp(-1*Math.pow(d1,2)/2)/Math.sqrt(2*Math.PI)*eqt*price*Math.sqrt(time)/100;
 }
 
 
@@ -105,15 +105,27 @@ function OPTIONVEGA(price, strike, volatility, interest, dividend, days, optiont
 * @param {4} input the risk-free interest rate.
 * @param {5} input the dividend rate as a percentage.
 * @param {6} input the time to maturity in days.
-* @param {7} input the type of option, Call or Put.
 * @return the Black-Scholes calculation for an option's Rho.
 * @customfunction
 */
 function OPTIONRHO(price, strike, volatility, interest, dividend, days, optiontype) {
+  var time = days/365;
+  var ert = Math.exp(-interest * time);
+  
+  if (optiontype == "Put")
+  {
+    var nNegD2 = NORMDIST_(-D2_(price, strike, volatility, interest, dividend, days));
+  
+    return -strike * time * ert * nNegD2/100;
+  }
+  
+  var nNegD1 = NORMDIST_(-D1_(price, strike, volatility, interest, dividend, days));
+  
+  return strike * time * ert * nNegD1/100;
 }
 
 /**
-* Calculates Put Price using the Black-Scholes Model.
+* Calculates Call Price using the Black-Scholes Model.
 *
 * @param {1} input the spot price of the underlying asset.
 * @param {2} input the strike price of the option.
@@ -121,16 +133,28 @@ function OPTIONRHO(price, strike, volatility, interest, dividend, days, optionty
 * @param {4} input the risk-free interest rate.
 * @param {5} input the dividend rate as a percentage.
 * @param {6} input the time to maturity in days.
+* @param {7} input the type of option, Call or Put.
 * @return the price of a Call.
 * @customfunction
 */
-function PUTPRICE(price, strike, volatility, interest, dividend, days) {
-  var xert = Math.exp(-interest *(days/365)) * strike;
-  var xeqt = Math.exp(-dividend *(days/365)) * price;
-  var nD2 = NORMDIST_(D2_(price, strike, volatility, interest, dividend, days));
-  var nNegD2 = NORMDIST_(-D2_(price, strike, volatility, interest, dividend, days));
+function OPTIONPRICE(price, strike, volatility, interest, dividend, days, optiontype) {
+  var time = days/365;
+  var xert = Math.exp(-interest * time) * price;
+  var seqt = Math.exp(-dividend * time) * strike;
   
-  return xeqt * nD2 - xert * nNegD2;
+  if (optiontype == "Put")
+  {
+    var nNegD1 = NORMDIST_(-D1_(price, strike, volatility, interest, dividend, days));
+    var nNegD2 = NORMDIST_(-D2_(price, strike, volatility, interest, dividend, days));
+    
+    return xert * nNegD2 - seqt * nNegD1;
+  }
+  
+  var nD1 = NORMDIST_(D1_(price, strike, volatility, interest, dividend, days));
+  var nD2 = NORMDIST_(D2_(price, strike, volatility, interest, dividend, days));
+  
+  
+  return seqt * nD1 - xert * nD2;
 }
 
 /**
@@ -146,9 +170,10 @@ function PUTPRICE(price, strike, volatility, interest, dividend, days) {
 * @customfunction
 */
 function D1_(price, strike, volatility, interest, dividend, days) {
+  var time = days/365;
   var lnsx = Math.log(price/strike);
-  var trqa = (interest - dividend + (Math.pow(volatility, 2))/2)*(days/365);
-  var asqrtT = volatility * Math.sqrt(days/365);
+  var trqa = (interest - dividend + (Math.pow(volatility, 2))/2)*time;
+  var asqrtT = volatility * Math.sqrt(time);
   
   return (lnsx + trqa)/asqrtT;
 }
@@ -166,8 +191,9 @@ function D1_(price, strike, volatility, interest, dividend, days) {
 * @customfunction
 */
 function D2_(price, strike, volatility, interest, dividend, days) {
-  var d1 = D1(price, strike, volatility, interest, dividend, days);
-  var asqrtT = volatility * Math.sqrt(days/365);
+  var time = days/365;
+  var d1 = D1_(price, strike, volatility, interest, dividend, days);
+  var asqrtT = volatility * Math.sqrt(time);
   
   return d1 - asqrtT;
 }
