@@ -119,7 +119,7 @@ function OPTIONRHO(price, strike, volatility, interest, dividend, days, optionty
     return -strike * time * ert * nNegD2/100;
   }
   
-  var nNegD1 = NORMDIST_(-D1_(price, strike, volatility, interest, dividend, days));
+  var nNegD1 = NORMDIST_(D2_(price, strike, volatility, interest, dividend, days));
   
   return strike * time * ert * nNegD1/100;
 }
@@ -139,8 +139,8 @@ function OPTIONRHO(price, strike, volatility, interest, dividend, days, optionty
 */
 function OPTIONPRICE(price, strike, volatility, interest, dividend, days, optiontype) {
   var time = days/365;
-  var xert = Math.exp(-interest * time) * price;
-  var seqt = Math.exp(-dividend * time) * strike;
+  var xert = Math.exp(-interest * time) * strike;
+  var seqt = Math.exp(-dividend * time) * price;
   
   if (optiontype == "Put")
   {
